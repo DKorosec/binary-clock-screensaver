@@ -104,12 +104,16 @@ function render() {
 }
 
 function main() {
-    const electron = require('electron');
-    const { ipcRenderer } = electron;
-    const msgTerminate = () => ipcRenderer.send('terminate', true);
-    document.addEventListener('keydown', msgTerminate);
-    document.addEventListener('mousedown', msgTerminate);
-    document.addEventListener('mousemove', function () { this.fired = this.fired ? msgTerminate() : true });
+    setTimeout(() => {
+        const electron = require('electron');
+        const { ipcRenderer } = electron;
+        const msgTerminate = () => ipcRenderer.send('terminate', true);
+        // something nasty happens, when windows launches screensaver.
+        // this event gets fired multiple times.
+        document.addEventListener('keydown', msgTerminate);
+        document.addEventListener('mousedown', msgTerminate);
+        document.addEventListener('mousemove', msgTerminate);
+    }, 1000);
 
     with (globals) {
         hmsLEDS = [new LEDClockBits(), new LEDClockBits(), new LEDClockBits()];

@@ -1,13 +1,7 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const electron = require('electron');
+const { app, BrowserWindow, ipcMain } = electron;
 let mainWindow = null;
-
-// screen saver passes /s, when running fullscreen.
-// we could implement other flags for preview, but we are just too lazy :)
-const shouldStart = process.argv.map(v => v.trim()).includes('/s');
-
-if (!shouldStart) {
-    app.quit();
-}
+let sideWindows = [];
 
 app.once('window-all-closed', function () {
     if (process.platform !== 'darwin') {
@@ -28,6 +22,27 @@ app.once('ready', () => {
     mainWindow.setMenu(null);
     // mainWindow.webContents.openDevTools();
     mainWindow.on('closed', () => mainWindow = null);
+
+    const externalDisplays = electron.screen.getAllDisplays()
+        .filter((display) => display.bounds.x !== 0 || display.bounds.y !== 0);
+
+    externalDisplays.forEach((externalDisplay) => {
+        const win = new BrowserWindow({
+            x: externalDisplay.bounds.x,
+            y: externalDisplay.bounds.y,
+            width: externalDisplay.bounds.width,
+            height: externalDisplay.bounds.height,
+            fullscreen: true
+        });
+        const index = sideWindows.push(win) - 1;
+        win.loadURL('file://' + __dirname + '/black.html');
+        win.setMenu(null);
+        win.on('closed', () => {
+            sideWindows[index] = null;
+        });
+    });
+
+
 });
 
 ipcMain.on('terminate', () => app.quit());
