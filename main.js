@@ -30,4 +30,4 @@ app.once('ready', () => {
     mainWindow.on('closed', () => mainWindow = null);
 });
 
-ipcMain.on('terminate', () => app.quit());
+//ipcMain.on('terminate', () => app.quit());

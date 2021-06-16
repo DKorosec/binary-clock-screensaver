@@ -2,6 +2,8 @@ Preview with:
 
 >npm run preview
 
+![PREVIEW](./preview.gif)
+
 Create package with: 
 
 >npm run package
