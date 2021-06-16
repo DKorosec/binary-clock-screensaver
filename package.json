@@ -17,7 +17,7 @@
   "scripts": {
     "package": "electron-forge package && electron-forge make",
     "start": "electron-forge start",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "preview": "node node_modules/electron/cli . /s",
     "make": "electron-forge make"
   },
   "author": "Dominik Korošec",
