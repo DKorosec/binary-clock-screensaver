@@ -1,3 +1,7 @@
+Preview with:
+
+>npm run preview
+
 Create package with: 
 
 >npm run package
